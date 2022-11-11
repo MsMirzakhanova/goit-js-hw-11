@@ -9,7 +9,9 @@ export default async function fetchImages(value, page) {
         const response = await axios.get(`${url}${filter}`);
         const data = await response.data;
         const hits = await data.hits;
+        //console.log(hits);
         return hits;
+        
         
     } catch (error) {
         console.error(error);

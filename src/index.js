@@ -1,13 +1,27 @@
 import './css/styles.css';
-import fetchImages from "./fetchImages"
+import fetchImages from "./fetchImages";
+import Notiflix from 'notiflix';
 
 
-searchForm = document.querySelector(`.search-form`)
-gallery = document.querySelector(`.gallery`)
-loadMoreBtn = document.querySelector(`.load-more`)
+//import SimpleLightbox from "simplelightbox";
+// Дополнительный импорт стилей
+//import "simplelightbox/dist/simple-lightbox.min.css";
+
+// let lightbox = new SimpleLightbox('.photo-card a', { 
+//     /* options */ 
+//     captionsData: "alt",
+//     captionDelay: 250,
+//     captionPosition: "bottom",
+
+// });
+
+
+const searchForm = document.querySelector(`.search-form`)
+const gallery = document.querySelector(`.gallery`)
+const loadMoreBtn = document.querySelector(`.load-more`)
+loadMoreBtn.classList.add('is-hidden');
 
 let currentPage = 1;
-let currentHits = 0;
 let searchQuery = '';
 
 searchForm.addEventListener(`submit`, onFormSubmit);
@@ -17,24 +31,44 @@ function resetPage() {
     currentPage = 1;
 };
 
-function onFormSubmit(event){
+async function onFormSubmit(event){
     event.preventDefault();
     clearGallery()
+  resetPage();
 
-    resetPage();
-    
-    searchQuery = event.currentTarget.searchQuery.value.trim();
-    fetchImages(searchQuery, currentPage).then(displayImageInfo);
-    currentPage += 1;
-    
-};
-function onLoadMoreBtn() {
-    fetchImages(searchQuery, currentPage);
-    currentPage += 1;
+  searchQuery = event.currentTarget.searchQuery.value.trim();
+  
+  if (searchQuery === ``) {
+    return Notiflix.Notify.failure(`Please enter the text request`);
+  }
+  const response = await fetchImages(searchQuery, currentPage);
+  if (response.length < 1) {
+   return Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`); 
+  }
+  else {
+    displayImageInfo(response);
+  };
+
+    if (response.length >= 40) {
+  loadMoreBtn.classList.remove('is-hidden');
+  };  
 };
 
-function displayImageInfo(hits) {
-        const markup = hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
+async function onLoadMoreBtn() {
+   currentPage += 1; 
+     const response = await fetchImages(searchQuery, currentPage);
+  displayImageInfo(response);
+  
+  // const totalHits = response.totalHits;
+  
+  // if (totalHits >= response.length) {
+  //   loadMoreBtn.classList.add('is-hidden');
+  //   Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`);
+  // }
+};
+
+function displayImageInfo(images) {
+        const markup = images.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
           return `<div class="photo-card">
             <a class="photo-card__item" href="${largeImageURL}">
   <img src="${webformatURL}" alt="${tags}" loading="lazy" />
@@ -59,9 +93,11 @@ function displayImageInfo(hits) {
         .join('');
       gallery.innerHTML = markup;   
 };
+
 function clearGallery() {
     gallery.innerHTML = ``;
-}
+};
+
 
 //Your API key: 31186027-a505e8b90e1642af76a363134
 
