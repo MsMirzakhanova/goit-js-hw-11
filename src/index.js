@@ -56,15 +56,14 @@ async function onFormSubmit(event){
 
 async function onLoadMoreBtn() {
    currentPage += 1; 
-     const response = await fetchImages(searchQuery, currentPage);
+  const response = await fetchImages(searchQuery, currentPage);
   displayImageInfo(response);
-  
-  // const totalHits = response.totalHits;
-  
-  // if (totalHits >= response.length) {
-  //   loadMoreBtn.classList.add('is-hidden');
-  //   Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`);
-  // }
+
+  const page = Number.parseFloat(response.totalHits / 40);
+  if (currentPage >= page) {
+    loadMoreBtn.classList.add('is-hidden');
+    Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`);
+  }
 };
 
 function displayImageInfo(images) {
