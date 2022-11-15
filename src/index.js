@@ -3,17 +3,11 @@ import fetchImages from "./fetchImages";
 import Notiflix from 'notiflix';
 
 
-//import SimpleLightbox from "simplelightbox";
-// Дополнительный импорт стилей
-//import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from "simplelightbox";
 
-// let lightbox = new SimpleLightbox('.photo-card a', { 
-//     /* options */ 
-//     captionsData: "alt",
-//     captionDelay: 250,
-//     captionPosition: "bottom",
+import "simplelightbox/dist/simple-lightbox.min.css";
 
-// });
+
 
 
 const searchForm = document.querySelector(`.search-form`)
@@ -23,6 +17,7 @@ loadMoreBtn.classList.add('is-hidden');
 
 let currentPage = 1;
 let searchQuery = '';
+
 
 searchForm.addEventListener(`submit`, onFormSubmit);
 loadMoreBtn.addEventListener(`click`, onLoadMoreBtn);
@@ -42,27 +37,37 @@ async function onFormSubmit(event){
     return Notiflix.Notify.failure(`Please enter the text request`);
   }
   const response = await fetchImages(searchQuery, currentPage);
-  if (response.length < 1) {
+  const hits = await response.hits
+  if (hits.length < 1) {
    return Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`); 
   }
   else {
-    displayImageInfo(response);
+    displayImageInfo(hits);
+    simpleLightBox = new SimpleLightbox('.gallery a').refresh();
   };
 
-    if (response.length >= 40) {
+    if (hits.length >= 40) {
   loadMoreBtn.classList.remove('is-hidden');
   };  
 };
 
 async function onLoadMoreBtn() {
-   currentPage += 1; 
+  currentPage += 1; 
+  
   const response = await fetchImages(searchQuery, currentPage);
-  displayImageInfo(response);
+  const hits = await response.hits
+
+  displayImageInfo(hits);
+  simpleLightBox = new SimpleLightbox('.gallery a').refresh();
 
   const page = Number.parseFloat(response.totalHits / 40);
   if (currentPage >= page) {
     loadMoreBtn.classList.add('is-hidden');
     Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`);
+  };
+ 
+  if (response.totalHits > 0) {
+    Notiflix.Notify.success(`Hooray! We found ${response.totalHits} images.`);
   }
 };
 
