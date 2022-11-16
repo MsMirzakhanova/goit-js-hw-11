@@ -36,6 +36,7 @@ async function onFormSubmit(event){
   }
   const response = await fetchImages(searchQuery, currentPage);
   const hits = await response.hits
+  
   if (hits.length < 1) {
     return Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`),
       loadMoreBtn.classList.add('is-hidden');
@@ -51,10 +52,11 @@ async function onFormSubmit(event){
 };
 
 async function onLoadMoreBtn() {
-  currentPage += 1; 
-  
+  currentPage ++; 
+
   const response = await fetchImages(searchQuery, currentPage);
   const hits = await response.hits
+  
 
   displayImageInfo(hits),
   simpleLightBox = new SimpleLightbox('.gallery a').refresh();
