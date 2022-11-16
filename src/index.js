@@ -52,14 +52,13 @@ async function onFormSubmit(event){
 };
 
 async function onLoadMoreBtn() {
-  currentPage +=1; 
+  currentPage ++; 
 
   const response = await fetchImages(searchQuery, currentPage);
   const hits = await response.hits
   
 
   displayImageInfo(hits);
-
   SimpleLightbox = new SimpleLightbox('.gallery a').refresh();
 
   const page = Number.parseFloat(response.totalHits / 40);
