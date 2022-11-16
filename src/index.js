@@ -58,8 +58,8 @@ async function onLoadMoreBtn() {
   const hits = await response.hits
   
 
-  displayImageInfo(hits),
-  simpleLightBox = new SimpleLightbox('.gallery a').refresh();
+  displayImageInfo(hits);
+  // simpleLightBox = new SimpleLightbox('.gallery a').refresh();
 
   const page = Number.parseFloat(response.totalHits / 40);
   if (currentPage >= page) {
