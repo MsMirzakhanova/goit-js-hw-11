@@ -43,7 +43,7 @@ async function onFormSubmit(event){
   }
   else {
     displayImageInfo(hits),
-    simpleLightBox = new SimpleLightbox('.gallery a').refresh()
+    SimpleLightbox = new SimpleLightbox('.gallery a').refresh()
   };
 
     if (hits.length >= 40) {
@@ -52,14 +52,15 @@ async function onFormSubmit(event){
 };
 
 async function onLoadMoreBtn() {
-  currentPage ++; 
+  currentPage +=1; 
 
   const response = await fetchImages(searchQuery, currentPage);
   const hits = await response.hits
   
 
   displayImageInfo(hits);
-  simpleLightBox = new SimpleLightbox('.gallery a').refresh();
+
+  SimpleLightbox = new SimpleLightbox('.gallery a').refresh();
 
   const page = Number.parseFloat(response.totalHits / 40);
   if (currentPage >= page) {
