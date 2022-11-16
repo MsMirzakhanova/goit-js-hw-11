@@ -41,8 +41,8 @@ async function onFormSubmit(event){
       loadMoreBtn.classList.add('is-hidden');
   }
   else {
-    displayImageInfo(hits);
-    simpleLightBox = new SimpleLightbox('.gallery a').refresh();
+    displayImageInfo(hits),
+    simpleLightBox = new SimpleLightbox('.gallery a').refresh()
   };
 
     if (hits.length >= 40) {
