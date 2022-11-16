@@ -60,7 +60,7 @@ async function onLoadMoreBtn() {
   
 
   displayImageInfo(hits);
-  // simpleLightBox = new SimpleLightbox('.gallery a').refresh();
+  simpleLightBox = new SimpleLightbox('.gallery a').refresh();
 
   const page = Number.parseFloat(response.totalHits / 40);
   if (currentPage >= page) {
