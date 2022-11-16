@@ -39,7 +39,8 @@ async function onFormSubmit(event){
   const response = await fetchImages(searchQuery, currentPage);
   const hits = await response.hits
   if (hits.length < 1) {
-   return Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`); 
+    return Notiflix.Notify.failure(`Sorry, there are no images matching your search query. Please try again.`),
+      loadMoreBtn.classList.add('is-hidden');
   }
   else {
     displayImageInfo(hits);
