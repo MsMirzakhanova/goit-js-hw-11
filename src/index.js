@@ -13,6 +13,7 @@ const gallery = document.querySelector(`.gallery`)
 const loadMoreBtn = document.querySelector(`.load-more`)
 loadMoreBtn.classList.add('is-hidden');
 
+let simpleLightBox;
 let currentPage = 1;
 let searchQuery = '';
 
