@@ -56,7 +56,7 @@ async function onLoadMoreBtn() {
   const response = await fetchImages(searchQuery, currentPage);
   const hits = await response.hits
 
-  displayImageInfo(hits);
+  displayImageInfo(hits),
   simpleLightBox = new SimpleLightbox('.gallery a').refresh();
 
   const page = Number.parseFloat(response.totalHits / 40);
